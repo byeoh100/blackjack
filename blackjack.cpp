@@ -91,69 +91,99 @@ int main()
     Player player;
     Player dealer;
     int choice;
+    char startComm;
     bool gameLose = false;
+    bool game = false;
     
-    gameStart(player, dealer);
-    player.hitStand();
-    std::cin >> choice;
-    while(choice == 1)
+    std::cout << "+ to deal" << std::endl;
+    std::cin >> startComm;
+    if(startComm == '+')
+        bool game = true;
+    else
+        std::cout << "Invalid Entry";
+    do
     {
-            player.getCards();
+        gameStart(player, dealer);
+        player.hitStand();
+        std::cin >> choice;
+        while(choice == 1)
+        {
+                player.getCards();
+                usleep(300000);
+                std::cout << player.hit();
+                usleep(300000);
+                std::cout << std::endl;
+                if(player.getTotal() > 21)
+                {
+                    usleep(300000);
+                    std::cout << "BUST!" << std::endl;
+                    gameLose = true;
+                    break;
+                }
+                player.hitStand();
+                std::cin >> choice;
+        }
+        if(gameLose == false)
+        {
+            std::cout << "Dealer reveals: " << std::endl;
             usleep(300000);
-            std::cout << player.hit();
-            usleep(300000);
+            dealer.getCards();
             std::cout << std::endl;
-            if(player.getTotal() > 21)
+            while(dealer.getTotal() < 17)
             {
-                std::cout << "BUST!" << std::endl;
-                gameLose = true;
-                break;
+                usleep(300000);
+                std::cout << "Dealer hits: " << std::endl;
+                dealer.getCards();
+                usleep(300000);
+                std::cout << dealer.hit();
+                usleep(300000);
+                std::cout << std::endl;
             }
-            player.hitStand();
-            std::cin >> choice;
-    }
-    if(gameLose == false)
-    {
-        std::cout << "Dealer reveals: " << std::endl;
-        usleep(300000);
-        dealer.getCards();
-        std::cout << std::endl;
-        while(dealer.getTotal() < 17)
-        {
-            usleep(300000);
-            std::cout << "Dealer hits: " << std::endl;
-            dealer.getCards();
-            usleep(300000);
-            std::cout << dealer.hit();
-            usleep(300000);
-            std::cout << std::endl;
-        }
-        if(dealer.getTotal() > 21)
-        {
-            std::cout << "DEALER BUST!" << std::endl;
-            std::cout << "Payout" << std::endl;
-        }
-        else
-        {
-            std::cout << "Dealer stands with: " << dealer.getTotal() << std::endl;
-            dealer.getCards();
-            std::cout << std::endl;
-            if(player.getTotal() > dealer.getTotal())
+            if(dealer.getTotal() > 21)
             {
-                std::cout << "Player win!" << std::endl;
+                usleep(300000);
+                std::cout << "DEALER BUST!" << std::endl;
                 std::cout << "Payout" << std::endl;
             }
-            else if(player.getTotal() < dealer.getTotal())
+            else
             {
-                std::cout << "Player lose!" << std::endl;
-                gameLose = true;
+                usleep(300000);
+                std::cout << "Dealer stands with: " << dealer.getTotal() << std::endl;
+                dealer.getCards();
+                std::cout << std::endl;
+                if(player.getTotal() > dealer.getTotal())
+                {
+                    usleep(500000);
+                    std::cout << "Player win with: " << player.getTotal() << std::endl;
+                    std::cout << "Payout" << std::endl;
+                }
+                else if(player.getTotal() < dealer.getTotal())
+                {
+                    usleep(500000);
+                    std::cout << "Player win loses with: " << player.getTotal() << std::endl;
+                    gameLose = true;
+                }
             }
         }
-    }
-    std::cout << "Play again?" << std::endl;
+        usleep(300000);
+        std::cout << "+ to play again" << std::endl;
+        std::cout << "Any other key to exit" << std::endl;
+        std::cin >> startComm;
+        if(startComm == '+')
+        {
+            game = false;
+            player.clearCards();
+            dealer.clearCards();
+            gameLose = false;
+        }
+        else
+            break;
+    } while(game == false);
+    std::cout << "fuck you" << std::endl;
 }
 
-//work on stand choice
-//make dealer
-//win or no?
+//ties/getting blackjack
 //betting
+//dealer revealing he has blackjack
+//splits
+//cin flushing
