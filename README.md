@@ -1,3 +1,2 @@
 # blackjack
-# ascii blackjack game
-# all features except for splits
+ASCII blackjack game. Has all features except for splits
